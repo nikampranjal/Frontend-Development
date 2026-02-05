@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Image Gallery</title>
+
+  <style>
+    /* ===== RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* ===== FILTER BUTTONS ===== */
+    .filters {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filters button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .filters button:hover {
+      background: #555;
+    }
+
+    /* ===== GALLERY GRID ===== */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease, filter 0.4s ease;
+    }
+
+    /* Hover Effects */
+    .gallery-item:hover img {
+      transform: scale(1.1);
+      filter: brightness(80%);
+    }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 10px;
+    }
+
+    .lightbox span {
+      position: absolute;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+      padding: 10px;
+      user-select: none;
+    }
+
+    .close {
+      top: 20px;
+      right: 30px;
+      font-size: 35px;
+    }
+
+    .prev {
+      left: 30px;
+    }
+
+    .next {
+      right: 30px;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .lightbox span {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Image Gallery</h1>
+
+  <!-- Filter Buttons -->
+  <div class="filters">
+    <button onclick="filterImages('all')">All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('city')">City</button>
+    <button onclick="filterImages('animals')">Animals</button>
+  </div>
+
+  <!-- Gallery -->
+<div class="gallery">
+
+  <!-- 🌿 NATURE -->
+  <div class="gallery-item nature">
+    <img src="https://picsum.photos/id/1018/600/400">
+  </div>
+  <div class="gallery-item nature">
+    <img src="https://picsum.photos/id/1015/600/400">
+  </div>
+  <div class="gallery-item nature">
+    <img src="https://picsum.photos/id/1036/600/400">
+  </div>
+  <div class="gallery-item nature">
+    <img src="https://picsum.photos/id/1056/600/400">
+  </div>
+  <div class="gallery-item nature">
+    <img src="https://picsum.photos/id/1043/600/400">
+  </div>
+
+  <!-- 🏙 CITY (UPDATED & CORRECT) -->
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1012/600/400"> <!-- city street -->
+</div>
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1013/600/400"> <!-- city buildings -->
+</div>
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1014/600/400"> <!-- urban road -->
+</div>
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1031/600/400"> <!-- city skyline -->
+</div>
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1035/600/400"> <!-- night city -->
+</div>
+<div class="gallery-item city">
+  <img src="https://picsum.photos/id/1040/600/400"> <!-- city bridge -->
+</div>
+
+
+  <!-- 🐶 ANIMALS -->
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1024/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1025/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1062/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1020/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/237/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1003/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1074/600/400">
+  </div>
+  <div class="gallery-item animals">
+    <img src="https://picsum.photos/id/1084/600/400">
+  </div>
+
+</div>
+
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">×</span>
+    <span class="prev" onclick="changeImage(-1)">❮</span>
+    <img id="lightbox-img" />
+    <span class="next" onclick="changeImage(1)">❯</span>
+  </div>
+
+  <script>
+    const galleryItems = document.querySelectorAll(".gallery-item img");
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    let currentIndex = 0;
+
+    // Open Lightbox
+    galleryItems.forEach((img, index) => {
+      img.addEventListener("click", () => {
+        currentIndex = index;
+        showImage();
+      });
+    });
+
+    function showImage() {
+      lightbox.style.display = "flex";
+      lightboxImg.src = galleryItems[currentIndex].src;
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = "none";
+    }
+
+    function changeImage(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = galleryItems.length - 1;
+      if (currentIndex >= galleryItems.length) currentIndex = 0;
+      showImage();
+    }
+
+    // Filter Images
+    function filterImages(category) {
+      const items = document.querySelectorAll(".gallery-item");
+      items.forEach(item => {
+        item.style.display =
+          category === "all" || item.classList.contains(category)
+            ? "block"
+            : "none";
+      });
+    }
+  </script>
+
+</body>
+</html>
